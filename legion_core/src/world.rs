@@ -470,7 +470,7 @@ impl World {
         (archetype, chunk)
     }
 
-    fn move_entity(
+    pub fn move_entity(
         &mut self,
         entity: Entity,
         add_components: &[(ComponentTypeId, ComponentMeta)],
