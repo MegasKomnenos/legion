@@ -470,6 +470,66 @@ impl World {
         (archetype, chunk)
     }
 
+    pub fn move_entity(
+        &mut self,
+        entity: Entity,
+        add_components: &[(ComponentTypeId, ComponentMeta)],
+        remove_components: &[ComponentTypeId],
+        add_tags: &[(TagTypeId, TagMeta, NonNull<u8>)],
+        remove_tags: &[TagTypeId],
+    ) -> &mut ComponentStorage {
+        let location = self.entity_locations.get(entity).expect("entity not found");
+
+        // find or create the target chunk
+        let (target_arch_index, target_chunkset_index) = self.find_chunk_with_delta(
+            location,
+            add_components,
+            remove_components,
+            add_tags,
+            remove_tags,
+        );
+
+        // Safety Note:
+        // It is only safe for us to have 2 &mut references to storage here because
+        // we know we are only going to be modifying two chunks that are at different
+        // indexes.
+
+        // fetch entity's chunk
+        let current_chunk = unsafe { &mut *self.storage.get() }
+            .chunk_mut(location)
+            .unwrap();
+
+        // fetch target chunk
+        let archetype = unsafe { &mut *self.storage.get() }
+            .archetype_mut(target_arch_index)
+            .unwrap();
+        let target_chunk_index = archetype.get_free_chunk(target_chunkset_index, 1);
+        let target_chunk = unsafe {
+            archetype
+                .chunkset_unchecked_mut(target_chunkset_index)
+                .chunk_unchecked_mut(target_chunk_index)
+        };
+
+        // move existing data over into new chunk
+        if let Some(swapped) = current_chunk.move_entity(target_chunk, location.component()) {
+            // update location of any entity that was moved into the previous location
+            self.entity_locations.set(swapped, location);
+        }
+
+        // record the entity's new location
+        self.entity_locations.set(
+            entity,
+            EntityLocation::new(
+                target_arch_index,
+                target_chunkset_index,
+                target_chunk_index,
+                ComponentIndex(target_chunk.len() - 1),
+            ),
+        );
+
+        target_chunk
+    }
+
     /// Adds a component to an entity, or sets its value if the component is
     /// already present.
     ///
