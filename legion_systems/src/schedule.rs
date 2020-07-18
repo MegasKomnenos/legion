@@ -564,6 +564,9 @@ impl Schedule {
 
     /// Converts the schedule into a vector of steps.
     pub fn into_vec(self) -> Vec<Step> { self.steps }
+
+    // Get read access to the steps.
+    pub fn get_vec(&self) -> &Vec<Step> { &self.steps }
 }
 
 impl From<Builder> for Schedule {
