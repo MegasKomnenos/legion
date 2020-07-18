@@ -293,10 +293,6 @@ impl Executor {
     pub fn into_vec(self) -> Vec<Box<dyn Schedulable>> {
         self.systems.into_iter().map(|s| s.0.into_inner()).collect()
     }
-    
-    pub fn add_system<T: Into<Box<dyn Schedulable>>>(&mut self, system: T) {
-        self.systems.push(SystemBox(UnsafeCell::new(system.into())));
-    }
 
     /// Executes all systems and then flushes their command buffers.
     pub fn execute(&mut self, world: &mut World, resources: &mut Resources) {
@@ -443,11 +439,6 @@ impl Builder {
         self
     }
 
-    pub fn add_system_from_vec(mut self, vec: &mut Vec<Box<dyn Schedulable>>) -> Self {
-        self.accumulator.append(vec);
-        self
-    }
-
     /// Waits for executing systems to complete, and the flushes all outstanding system
     /// command buffers.
     pub fn flush(mut self) -> Self {
@@ -573,12 +564,6 @@ impl Schedule {
 
     /// Converts the schedule into a vector of steps.
     pub fn into_vec(self) -> Vec<Step> { self.steps }
-
-    // Get read access to the steps.
-    pub fn get_vec(&self) -> &Vec<Step> { &self.steps }
-
-    // Get write access to the steps.
-    pub fn get_vec_mut(&mut self) -> &mut Vec<Step> { &mut self.steps }
 }
 
 impl From<Builder> for Schedule {
