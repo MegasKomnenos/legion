@@ -294,11 +294,6 @@ impl Executor {
         self.systems.into_iter().map(|s| s.0.into_inner()).collect()
     }
 
-    // Get read access to executor's internal contents
-    pub fn get_vec(&self) -> Vec<&Box<dyn Schedulable>> {
-        unsafe { self.systems.iter().map(|s| &*s.0.get()).collect() }
-    }
-
     /// Executes all systems and then flushes their command buffers.
     pub fn execute(&mut self, world: &mut World, resources: &mut Resources) {
         self.run_systems(world, resources);
@@ -441,6 +436,11 @@ impl Builder {
     /// Adds a system to the schedule.
     pub fn add_system<T: Into<Box<dyn Schedulable>>>(mut self, system: T) -> Self {
         self.accumulator.push(system.into());
+        self
+    }
+
+    pub fn add_system_from_vec(mut self, vec: &mut Vec<Box<dyn Schedulable>>) -> Self {
+        self.accumulator.append(vec);
         self
     }
 
