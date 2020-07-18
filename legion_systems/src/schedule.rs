@@ -295,7 +295,7 @@ impl Executor {
     }
     
     pub fn add_system<T: Into<Box<dyn Schedulable>>>(&mut self, system: T) {
-        self.systems.push(SystemBox(UnsafeCell::new(s.into())));
+        self.systems.push(SystemBox(UnsafeCell::new(system.into())));
     }
 
     /// Executes all systems and then flushes their command buffers.
@@ -578,7 +578,7 @@ impl Schedule {
     pub fn get_vec(&self) -> &Vec<Step> { &self.steps }
 
     // Get write access to the steps.
-    pub fn get_vec_mut(&self) -> &mut Vec<Step> { &mut self.steps }
+    pub fn get_vec_mut(&mut self) -> &mut Vec<Step> { &mut self.steps }
 }
 
 impl From<Builder> for Schedule {
