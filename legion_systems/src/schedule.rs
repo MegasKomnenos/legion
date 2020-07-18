@@ -296,7 +296,7 @@ impl Executor {
 
     // Get read access to executor's internal contents
     pub fn get_vec(&self) -> Vec<&Box<dyn Schedulable>> {
-        unsafe { self.systems.iter().map(|s| &*s.get()).collect() }
+        unsafe { self.systems.iter().map(|s| &*s.0.get()).collect() }
     }
 
     /// Executes all systems and then flushes their command buffers.
