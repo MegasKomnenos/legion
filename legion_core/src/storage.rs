@@ -329,8 +329,8 @@ impl Storage {
 /// Stores metadata decribing the type of a tag.
 #[derive(Copy, Clone, PartialEq)]
 pub struct TagMeta {
-    size: usize,
-    align: usize,
+    pub size: usize,
+    pub align: usize,
     drop_fn: Option<fn(*mut u8)>,
     eq_fn: fn(*const u8, *const u8) -> bool,
     clone_fn: fn(*const u8, *mut u8),
