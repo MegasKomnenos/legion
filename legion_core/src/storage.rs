@@ -185,7 +185,7 @@ pub struct Storage {
     world_id: WorldId,
     component_types: ComponentTypes,
     tag_types: TagTypes,
-    pub archetypes: Vec<ArchetypeData>,
+    archetypes: Vec<ArchetypeData>,
     subscribers: Subscribers,
 }
 
@@ -329,8 +329,8 @@ impl Storage {
 /// Stores metadata decribing the type of a tag.
 #[derive(Copy, Clone, PartialEq)]
 pub struct TagMeta {
-    pub size: usize,
-    pub align: usize,
+    size: usize,
+    align: usize,
     drop_fn: Option<fn(*mut u8)>,
     eq_fn: fn(*const u8, *const u8) -> bool,
     clone_fn: fn(*const u8, *mut u8),
@@ -375,9 +375,9 @@ impl TagMeta {
 /// Stores metadata describing the type of a component.
 #[derive(Copy, Clone, PartialEq)]
 pub struct ComponentMeta {
-    pub size: usize,
-    pub align: usize,
-    pub drop_fn: Option<fn(*mut u8)>,
+    size: usize,
+    align: usize,
+    drop_fn: Option<fn(*mut u8)>,
 }
 
 impl ComponentMeta {
@@ -404,7 +404,7 @@ impl ComponentMeta {
 #[derive(Default, Clone, PartialEq)]
 pub struct ArchetypeDescription {
     tags: Vec<(TagTypeId, TagMeta)>,
-    pub components: Vec<(ComponentTypeId, ComponentMeta)>,
+    components: Vec<(ComponentTypeId, ComponentMeta)>,
     tag_names: Vec<&'static str>,
     component_names: Vec<&'static str>,
 }
@@ -619,10 +619,10 @@ impl Drop for DynamicTagSet {
 /// (component and tag types).
 pub struct ArchetypeData {
     id: ArchetypeId,
-    pub desc: ArchetypeDescription,
+    desc: ArchetypeDescription,
     tags: Tags,
-    pub component_layout: ComponentStorageLayout,
-    pub chunk_sets: Vec<Chunkset>,
+    component_layout: ComponentStorageLayout,
+    chunk_sets: Vec<Chunkset>,
     subscribers: Subscribers,
 }
 
@@ -1307,7 +1307,7 @@ impl ComponentStorageLayout {
 /// Contains chunks with the same layout and tag values.
 #[derive(Default)]
 pub struct Chunkset {
-    pub chunks: Vec<ComponentStorage>,
+    chunks: Vec<ComponentStorage>,
     subscribers: Subscribers,
 }
 
@@ -1573,9 +1573,9 @@ impl Components {
 /// Stores a chunk of entities and their component data of a specific data layout.
 pub struct ComponentStorage {
     id: ChunkId,
-    pub capacity: usize,
+    capacity: usize,
     entities: Vec<Entity>,
-    pub component_layout: std::alloc::Layout,
+    component_layout: std::alloc::Layout,
     component_offsets: FxHashMap<ComponentTypeId, usize>,
     component_info: UnsafeCell<Components>,
     component_data: Option<NonNull<u8>>,
@@ -1739,7 +1739,7 @@ impl ComponentStorage {
         }
     }
 
-    pub fn free(&mut self) {
+    fn free(&mut self) {
         debug_assert!(self.is_allocated());
         debug_assert_eq!(0, self.len());
 

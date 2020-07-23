@@ -171,7 +171,7 @@ impl WorldId {
 /// Contains queryable collections of data associated with `Entity`s.
 pub struct World {
     id: WorldId,
-    pub storage: UnsafeCell<Storage>,
+    storage: UnsafeCell<Storage>,
     pub(crate) entity_allocator: Arc<EntityAllocator>,
     entity_locations: Locations,
     defrag_progress: usize,
@@ -381,7 +381,7 @@ impl World {
             archetype.delete_all();
         }
 
-        //self.entity_allocator.delete_all_entities();
+        self.entity_allocator.delete_all_entities();
     }
 
     fn delete_location(&mut self, location: EntityLocation) {
