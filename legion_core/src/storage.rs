@@ -621,7 +621,7 @@ pub struct ArchetypeData {
     id: ArchetypeId,
     pub desc: ArchetypeDescription,
     tags: Tags,
-    component_layout: ComponentStorageLayout,
+    pub component_layout: ComponentStorageLayout,
     pub chunk_sets: Vec<Chunkset>,
     subscribers: Subscribers,
 }
@@ -1851,6 +1851,19 @@ impl Drop for ComponentStorage {
                             drop_fn(ptr.add(info.element_size * i));
                         }
                     }
+                }
+            }
+
+            for e in &self.entities {
+                self.subscribers.send(Event::EntityRemoved(*e, self.id()));
+            }
+
+            self.update_count_gauge();
+
+            // free the chunk's memory
+            if self.component_layout.size() > 0 {
+                unsafe {
+                    std::alloc::dealloc(ptr.as_ptr(), self.component_layout);
                 }
             }
         }
