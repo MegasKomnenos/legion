@@ -381,7 +381,7 @@ impl World {
             archetype.delete_all();
         }
 
-        self.entity_allocator.delete_all_entities();
+        //self.entity_allocator.delete_all_entities();
     }
 
     fn delete_location(&mut self, location: EntityLocation) {
