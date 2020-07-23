@@ -1853,19 +1853,6 @@ impl Drop for ComponentStorage {
                     }
                 }
             }
-
-            for e in &self.entities {
-                self.subscribers.send(Event::EntityRemoved(*e, self.id()));
-            }
-
-            self.update_count_gauge();
-
-            // free the chunk's memory
-            if self.component_layout.size() > 0 {
-                unsafe {
-                    std::alloc::dealloc(ptr.as_ptr(), self.component_layout);
-                }
-            }
         }
     }
 }
