@@ -375,9 +375,9 @@ impl TagMeta {
 /// Stores metadata describing the type of a component.
 #[derive(Copy, Clone, PartialEq)]
 pub struct ComponentMeta {
-    size: usize,
-    align: usize,
-    drop_fn: Option<fn(*mut u8)>,
+    pub size: usize,
+    pub align: usize,
+    pub drop_fn: Option<fn(*mut u8)>,
 }
 
 impl ComponentMeta {
@@ -404,7 +404,7 @@ impl ComponentMeta {
 #[derive(Default, Clone, PartialEq)]
 pub struct ArchetypeDescription {
     tags: Vec<(TagTypeId, TagMeta)>,
-    components: Vec<(ComponentTypeId, ComponentMeta)>,
+    pub components: Vec<(ComponentTypeId, ComponentMeta)>,
     tag_names: Vec<&'static str>,
     component_names: Vec<&'static str>,
 }
@@ -619,7 +619,7 @@ impl Drop for DynamicTagSet {
 /// (component and tag types).
 pub struct ArchetypeData {
     id: ArchetypeId,
-    desc: ArchetypeDescription,
+    pub desc: ArchetypeDescription,
     tags: Tags,
     component_layout: ComponentStorageLayout,
     pub chunk_sets: Vec<Chunkset>,
