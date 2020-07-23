@@ -171,7 +171,7 @@ impl WorldId {
 /// Contains queryable collections of data associated with `Entity`s.
 pub struct World {
     id: WorldId,
-    storage: UnsafeCell<Storage>,
+    pub storage: UnsafeCell<Storage>,
     pub(crate) entity_allocator: Arc<EntityAllocator>,
     entity_locations: Locations,
     defrag_progress: usize,

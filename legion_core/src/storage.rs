@@ -185,7 +185,7 @@ pub struct Storage {
     world_id: WorldId,
     component_types: ComponentTypes,
     tag_types: TagTypes,
-    archetypes: Vec<ArchetypeData>,
+    pub archetypes: Vec<ArchetypeData>,
     subscribers: Subscribers,
 }
 
@@ -622,7 +622,7 @@ pub struct ArchetypeData {
     desc: ArchetypeDescription,
     tags: Tags,
     component_layout: ComponentStorageLayout,
-    chunk_sets: Vec<Chunkset>,
+    pub chunk_sets: Vec<Chunkset>,
     subscribers: Subscribers,
 }
 
@@ -1307,7 +1307,7 @@ impl ComponentStorageLayout {
 /// Contains chunks with the same layout and tag values.
 #[derive(Default)]
 pub struct Chunkset {
-    chunks: Vec<ComponentStorage>,
+    pub chunks: Vec<ComponentStorage>,
     subscribers: Subscribers,
 }
 
@@ -1573,7 +1573,7 @@ impl Components {
 /// Stores a chunk of entities and their component data of a specific data layout.
 pub struct ComponentStorage {
     id: ChunkId,
-    capacity: usize,
+    pub capacity: usize,
     entities: Vec<Entity>,
     component_layout: std::alloc::Layout,
     component_offsets: FxHashMap<ComponentTypeId, usize>,
