@@ -1739,7 +1739,7 @@ impl ComponentStorage {
         }
     }
 
-    fn free(&mut self) {
+    pub fn free(&mut self) {
         debug_assert!(self.is_allocated());
         debug_assert_eq!(0, self.len());
 
