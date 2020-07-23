@@ -1575,7 +1575,7 @@ pub struct ComponentStorage {
     id: ChunkId,
     pub capacity: usize,
     entities: Vec<Entity>,
-    component_layout: std::alloc::Layout,
+    pub component_layout: std::alloc::Layout,
     component_offsets: FxHashMap<ComponentTypeId, usize>,
     component_info: UnsafeCell<Components>,
     component_data: Option<NonNull<u8>>,
